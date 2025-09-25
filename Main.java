@@ -39,7 +39,7 @@ public class Main {
         // Ajouter quelques transactions
         compteService.effectuerDepot(101, 5500, "Salaire");
         compteService.effectuerDepot(102, 2500, "Economies");
-        compteService.effectuerRetrait(101, 500, "Retrait DAB");
+        compteService.effectuerRetrait(101, 300, "Retrait DAB");
         compteService.effectuerVirement(101, 201, 1000, "Virement vers ami");
     }
 
