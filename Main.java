@@ -64,7 +64,7 @@ public class Main {
                     menuView.afficherAuRevoir();
                     break;
                 default:
-                    System.out.println("Choix invalide, essayez encore");
+                    System.out.println("Choix invalide, veuillez reessayer");
             }
         }
 
