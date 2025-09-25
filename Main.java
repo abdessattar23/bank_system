@@ -37,8 +37,8 @@ public class Main {
         compteService.creerCompte(201, "COURANT", 2);
 
         // Ajouter quelques transactions
-        compteService.effectuerDepot(101, 5000, "Salaire");
-        compteService.effectuerDepot(102, 2000, "Economies");
+        compteService.effectuerDepot(101, 5500, "Salaire");
+        compteService.effectuerDepot(102, 2500, "Economies");
         compteService.effectuerRetrait(101, 500, "Retrait DAB");
         compteService.effectuerVirement(101, 201, 1000, "Virement vers ami");
     }
