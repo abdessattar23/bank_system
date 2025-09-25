@@ -3,6 +3,7 @@ import services.CompteService;
 import views.MenuView;
 import java.util.Scanner;
 
+// Application bancaire simple
 public class Main {
     private static CompteService compteService;
     private static ClientController clientController;
