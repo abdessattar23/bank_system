@@ -31,7 +31,7 @@ public class Main {
         compteService.creerClient(1, "Alami", "Hassan", "hassan@email.com", "123456");
         compteService.creerClient(2, "Benali", "Fatima", "fatima@email.com", "654321");
 
-        // Creer quelques comptes
+        // Creer quelques comptes bancaires
         compteService.creerCompte(101, "COURANT", 1);
         compteService.creerCompte(102, "EPARGNE", 1);
         compteService.creerCompte(201, "COURANT", 2);
