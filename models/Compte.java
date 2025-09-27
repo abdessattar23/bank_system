@@ -20,24 +20,29 @@ public class Compte {
 
     public void ajouterTransaction(Transaction transaction) {
         transactions.add(transaction);
-
-        if (transaction.getTypeTransaction().equals("DEPOT")) {
-            solde += transaction.getMontant();
-        } else if (transaction.getTypeTransaction().equals("RETRAIT")) {
-            if (solde >= transaction.getMontant()) {
-                solde -= transaction.getMontant();
-            } else {
-                throw new ArithmeticException("Solde insuffisant pour ce retrait");
-            }
-        } else if (transaction.getTypeTransaction().equals("VIREMENT")) {
-            if (solde >= transaction.getMontant()) {
-                solde -= transaction.getMontant();
-                if (transaction.getCompteDestination() != null) {
-                    transaction.getCompteDestination().recevoirVirement(transaction.getMontant());
+        String type = transaction.getTypeTransaction();
+        double montant = transaction.getMontant();
+        switch (type) {
+            case "DEPOT":
+                solde += montant;
+                break;
+            case "RETRAIT":
+                if (solde < montant) {
+                    throw new ArithmeticException("Solde insuffisant pour ce retrait");
                 }
-            } else {
-                throw new ArithmeticException("Solde insuffisant pour ce virement");
-            }
+                solde -= montant;
+                break;
+            case "VIREMENT":
+                if (solde < montant) {
+                    throw new ArithmeticException("Solde insuffisant pour ce virement");
+                }
+                solde -= montant;
+                if (transaction.getCompteDestination() != null) {
+                    transaction.getCompteDestination().recevoirVirement(montant);
+                }
+                break;
+            default:
+                break;
         }
     }
 

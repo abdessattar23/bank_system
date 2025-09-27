@@ -2,8 +2,6 @@ package services;
 
 import models.*;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 
 public class CompteService {
     private List<Client> clients;
@@ -49,7 +47,7 @@ public class CompteService {
         }
 
         Transaction transaction = new Transaction(nextTransactionId++, "DEPOT",
-                                                montant, motif, compte);
+                montant, motif, compte);
         compte.ajouterTransaction(transaction);
         transactions.add(transaction);
     }
@@ -65,13 +63,13 @@ public class CompteService {
         }
 
         Transaction transaction = new Transaction(nextTransactionId++, "RETRAIT",
-                                                montant, motif, compte);
+                montant, motif, compte);
         compte.ajouterTransaction(transaction);
         transactions.add(transaction);
     }
 
     public void effectuerVirement(int idCompteSource, int idCompteDestination,
-                                 double montant, String motif) {
+            double montant, String motif) {
         Compte compteSource = trouverCompteParId(idCompteSource);
         Compte compteDestination = trouverCompteParId(idCompteDestination);
 
@@ -84,51 +82,69 @@ public class CompteService {
         }
 
         Transaction transaction = new Transaction(nextTransactionId++, "VIREMENT",
-                                                montant, motif, compteSource, compteDestination);
+                montant, motif, compteSource, compteDestination);
         compteSource.ajouterTransaction(transaction);
         transactions.add(transaction);
     }
 
     public Client trouverClientParId(int id) {
-        return clients.stream()
-                .filter(c -> c.getIdClient() == id)
-                .findFirst()
-                .orElse(null);
+        for (Client client : clients) {
+            if (client.getIdClient() == id) {
+                return client;
+            }
+        }
+        return null;
     }
 
     public Compte trouverCompteParId(int id) {
-        return comptes.stream()
-                .filter(c -> c.getIdCompte() == id)
-                .findFirst()
-                .orElse(null);
+        for (Compte compte : comptes) {
+            if (compte.getIdCompte() == id) {
+                return compte;
+            }
+        }
+        return null;
     }
 
     public List<Transaction> getTransactionsParCompte(int idCompte) {
-        return transactions.stream()
-                .filter(t -> t.getCompteSource().getIdCompte() == idCompte)
-                .collect(Collectors.toList());
+        List<Transaction> resultat = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getCompteSource().getIdCompte() == idCompte) {
+                resultat.add(transaction);
+            }
+        }
+        return resultat;
     }
 
     public List<Transaction> getTransactionsParType(String type) {
-        return transactions.stream()
-                .filter(t -> t.getTypeTransaction().equals(type))
-                .collect(Collectors.toList());
+        List<Transaction> resultat = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getTypeTransaction().equals(type)) {
+                resultat.add(transaction);
+            }
+        }
+        return resultat;
     }
 
     public double calculerTotalDepots(int idClient) {
-        return transactions.stream()
-                .filter(t -> t.getTypeTransaction().equals("DEPOT") &&
-                           t.getCompteSource().getClient().getIdClient() == idClient)
-                .mapToDouble(Transaction::getMontant)
-                .sum();
+        double total = 0.0;
+        for (Transaction transaction : transactions) {
+            if (transaction.getTypeTransaction().equals("DEPOT")
+                    && transaction.getCompteSource().getClient().getIdClient() == idClient) {
+                total += transaction.getMontant();
+            }
+        }
+        return total;
     }
 
     public double calculerTotalRetraits(int idClient) {
-        return transactions.stream()
-                .filter(t -> t.getTypeTransaction().equals("RETRAIT") &&
-                           t.getCompteSource().getClient().getIdClient() == idClient)
-                .mapToDouble(Transaction::getMontant)
-                .sum();
+        double total = 0.0;
+        for (Transaction transaction : transactions) {
+            if (transaction.getTypeTransaction().equals("RETRAIT")
+                    && transaction.getCompteSource().getClient().getIdClient() == idClient) {
+                total += transaction.getMontant();
+            }
+        }
+        return total;
     }
 
     public List<Client> getClients() {

@@ -79,7 +79,7 @@ public class ClientController {
             System.out.println("Compte " + compte.getIdCompte() + ":");
             for (Transaction transaction : compte.getTransactions()) {
                 System.out.println("  - " + transaction.getTypeTransaction() +
-                                 " de " + transaction.getMontant() + " DH");
+                        " de " + transaction.getMontant() + " DH");
                 System.out.println("    Date: " + transaction.getDate());
                 System.out.println("    Motif: " + transaction.getMotif());
             }
@@ -98,26 +98,32 @@ public class ClientController {
         if (choix == 1) {
             System.out.print("Entrez le type (DEPOT/RETRAIT/VIREMENT): ");
             String type = scanner.nextLine().toUpperCase();
-
-            for (Compte compte : client.getComptes()) {
-                compte.getTransactions().stream()
-                    .filter(t -> t.getTypeTransaction().equals(type))
-                    .forEach(t -> {
-                        System.out.println(t.getTypeTransaction() + " - " +
-                                         t.getMontant() + " DH - " + t.getDate());
-                    });
-            }
+            afficherTransactionsParType(client, type);
         } else if (choix == 2) {
             System.out.print("Montant minimum: ");
             double montantMin = scanner.nextDouble();
+            afficherTransactionsParMontant(client, montantMin);
+        }
+    }
 
-            for (Compte compte : client.getComptes()) {
-                compte.getTransactions().stream()
-                    .filter(t -> t.getMontant() >= montantMin)
-                    .forEach(t -> {
-                        System.out.println(t.getTypeTransaction() + " - " +
-                                         t.getMontant() + " DH - " + t.getDate());
-                    });
+    private void afficherTransactionsParType(Client client, String type) {
+        for (Compte compte : client.getComptes()) {
+            for (Transaction transaction : compte.getTransactions()) {
+                if (transaction.getTypeTransaction().equals(type)) {
+                    System.out.println(transaction.getTypeTransaction() + " - "
+                            + transaction.getMontant() + " DH - " + transaction.getDate());
+                }
+            }
+        }
+    }
+
+    private void afficherTransactionsParMontant(Client client, double montantMin) {
+        for (Compte compte : client.getComptes()) {
+            for (Transaction transaction : compte.getTransactions()) {
+                if (transaction.getMontant() >= montantMin) {
+                    System.out.println(transaction.getTypeTransaction() + " - "
+                            + transaction.getMontant() + " DH - " + transaction.getDate());
+                }
             }
         }
     }

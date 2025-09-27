@@ -95,10 +95,17 @@ public class GestionnaireController {
 
         String typeCompte;
         switch (choixType) {
-            case 1: typeCompte = "COURANT"; break;
-            case 2: typeCompte = "EPARGNE"; break;
-            case 3: typeCompte = "DEPOT_A_TERME"; break;
-            default: typeCompte = "COURANT";
+            case 1:
+                typeCompte = "COURANT";
+                break;
+            case 2:
+                typeCompte = "EPARGNE";
+                break;
+            case 3:
+                typeCompte = "DEPOT_A_TERME";
+                break;
+            default:
+                typeCompte = "COURANT";
         }
 
         try {
@@ -198,7 +205,7 @@ public class GestionnaireController {
         System.out.println("\n=== Liste des clients ===");
         for (Client client : compteService.getClients()) {
             System.out.println("ID: " + client.getIdClient() +
-                             " - " + client.getNom() + " " + client.getPrenom());
+                    " - " + client.getNom() + " " + client.getPrenom());
             System.out.println("Email: " + client.getEmail());
             System.out.println("Nombre de comptes: " + client.getComptes().size());
             System.out.println("Solde total: " + client.getSoldeTotal() + " DH");
@@ -241,12 +248,15 @@ public class GestionnaireController {
     }
 
     private void detecterTransactionsSuspectes() {
+        // filtering and stuff
         System.out.println("\n=== Transactions suspectes ===");
         double seuilMontant = 10000.0;
-
-        List<Transaction> transactionsSuspectes = compteService.getTransactions().stream()
-            .filter(t -> t.getMontant() > seuilMontant)
-            .collect(ArrayList::new, (list, item) -> list.add(item), (list1, list2) -> list1.addAll(list2));
+        List<Transaction> transactionsSuspectes = new ArrayList<>();
+        for (Transaction transaction : compteService.getTransactions()) {
+            if (transaction.getMontant() > seuilMontant) {
+                transactionsSuspectes.add(transaction);
+            }
+        }
 
         if (transactionsSuspectes.isEmpty()) {
             System.out.println("Aucune transaction suspecte detectee");

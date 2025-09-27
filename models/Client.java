@@ -22,9 +22,11 @@ public class Client extends Personne {
     }
 
     public double getSoldeTotal() {
-        return comptes.stream()
-                .mapToDouble(Compte::getSolde)
-                .sum();
+        double total = 0.0;
+        for (Compte compte : comptes) {
+            total += compte.getSolde();
+        }
+        return total;
     }
 
     public int getIdClient() {
